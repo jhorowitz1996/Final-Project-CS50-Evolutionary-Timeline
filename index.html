@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Animate a point along a route</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-theme-classic">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+    <style>
+      body { margin: 0; padding: 0; }
+      #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+      .overlay {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+      }
+
+      .overlay button {
+        font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        background-color: #3386c0;
+        color: #fff;
+        display: inline-block;
+        margin: 0;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+
+      .overlay button:hover {
+        background-color: #4ea0da;
+      }
+
+      .map-overlay {
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        margin-top: 100px;
+        padding: 10px 10px 10px 0;
+      }
+
+      .map-overlay .map-overlay-inner {
+        background-color: #fff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+        padding: 10px;
+        margin-bottom: 10px;
+        max-width: 250px;
+      }
+
+      .map-overlay h2 {
+        line-height: 24px;
+        display: block;
+        margin: 0 0 10px;
+      }
+
+      .map-overlay input.slider {
+        background-color: transparent;
+        display: inline-block;
+        width: 100%;
+        position: relative;
+        margin: 0;
+        cursor: ew-resize;
+      }
+
+      /* Override autocomplete library CSS */
+      .aa-Autocomplete .aa-Form .aa-InputWrapperPrefix {
+        height: auto;
+        margin: 0;
+        padding: 0;
+        order: 4;
+      }
+      .aa-Autocomplete .aa-Form .aa-InputWrapperSuffix {
+        display: none
+      }
+      .aa-Autocomplete .aa-Form .aa-SubmitButton {
+        height: auto;
+        background-color: white;
+        margin: 7px 0 2px 0;
+        padding: 0;
+      }
+      .aa-Autocomplete .aa-Form .aa-InputWrapper {
+        margin: 0;
+        padding: 0 0 0 10px;
+        height: auto;
+        width: auto;
+      }
+
+      .aa-Autocomplete .aa-Form .aa-Input {
+        margin: 0;
+        padding: 0;
+        height: auto;
+        width: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-js"></script>
+
+    <div id="map"></div>
+    <div class="overlay">
+      <button id="replay">Replay</button>
+
+      <div class="map-overlay top">
+        <div class="map-overlay-inner">
+          <h2>Emoji</h2>
+          <label id="emojis"></label>
+          <select id="emoji_selector">
+            <option value=""></option>
+            <option value="0">🌎</option>
+            <option value="1">🌙</option>
+            <option value="3">🦠</option>
+            <option value="4">🚨</option>
+            <option value="5">🌬️</option>
+            <option value="6">☁️</option>
+            <option value="7">🧫</option>
+            <option value="8">🌱</option>
+            <option value="9">🦎</option>
+            <option value="10">☠️</option>
+            <option value="11">🦕</option>
+            <option value="12">🧩</option>
+            <option value="13">🦖</option>
+            <option value="15">🐒</option>
+            <option value="16">👣</option>
+            <option value="17">🔥</option>
+            <option value="18">⛏️</option>
+            <option value="19">⚙️</option>
+            <option value="20">🌾</option>
+            <option value="21">✍🏻</option>
+            <option value="22">💸</option>
+            <option value="23">🖼️</option>
+            <option value="24">🎓</option>
+            <option value="25">🇺🇸</option>
+            <option value="26">⚔️ </option>
+            <option value="27">💻</option>
+          </select>
+
+        </div>
+        <div class="map-overlay-inner">
+          <h2>Select a timeline point</h2>
+          <div id="autocomplete"></div>
+        </div>
+        <div class="map-overlay-inner">
+          <h2>Date</h2>
+          <label id="dates"></label>
+          <input id="slider1" class="slider" type="range" min="0" max="27" step="1" value="0">
+        </div>
+        <div class="map-overlay-inner">
+          <h2>Distances</h2>
+          <label id="distances"></label>
+          <input id="slider2" class="slider" type="range" min="0" max="27" step="1" value="0">
+        </div>
+        <div class="map-overlay-inner">
+          <h2>Events</h2>
+          <label id="events"></label>
+          <input id="slider3" class="slider" type="range" min="0" max="27" step="1" value="0">
+        </div>
+
+      </div>
+
+    </div>
+
+    <script>
+      // TO MAKE THE MAP APPEAR YOU MUST
+      // ADD YOUR ACCESS TOKEN FROM
+      // https://account.mapbox.com
+      mapboxgl.accessToken = 'pk.eyJ1IjoiamVubmlmZXJob3Jvd2l0eiIsImEiOiJja21pNXd5NzAwZHk4MnFxdXdlMDE1dTJjIn0.JNNHK-Megf7tCA47ctPcyg';
+      const map = new mapboxgl.Map({
+              container: 'map',
+              style: 'mapbox://styles/jenniferhorowitz/cl2ezi8vs000u14pgj6dfcji5',
+              center: [-96, 37.8],
+              zoom: 3
+            });
+
+      const dates = [
+        "4.54 billion years ago",
+        "4.52 billion years ago",
+        "3.95 billion years ago",
+        "3.8 billion years ago",
+        "3.40 billion years ago",
+        "2.70 billion years ago",
+        "2.50 billion years ago",
+        "600 million years ago",
+        "465 million years ago",
+        "370 million years ago",
+        "250 million years ago",
+        "240 million years ago",
+        "200 million years ago",
+        "67 million years ago",
+        "66 million years ago",
+        "60 million years ago",
+        "6 million years ago",
+        "1 million years ago",
+        "1.8 million years ago",
+        "200,000 years ago",
+        "10,000 years ago",
+        "5,500 years ago",
+        "2,600 years ago",
+        "622 years ago",
+        "386 years ago",
+        "239 years ago",
+        "78 years ago",
+        "49 years ago"
+      ];
+
+      const distances = [
+        "2,611 miles",
+        "2,587 miles",
+        "2,304 miles",
+        "2,184 miles",
+        "1,955 miles",
+        "1,552 miles",
+        "1,380 miles",
+        "345 miles",
+        "266 miles",
+        "213 miles",
+        "144 miles",
+        "139 miles",
+        "115 miles",
+        "38 miles",
+        "37 miles",
+        "34 miles",
+        "3 miles",
+        "2 miles",
+        "1.06 miles",
+        "0.115 miles",
+        "0.005 miles",
+        "0.003 miles",
+        "0.001 miles",
+        "0.0003 miles",
+        "0.0002 miles",
+        "0.0001 miles",
+        "0.000045 miles",
+        "0.000026 miles"
+      ];
+
+      const distances_for_math = [
+        2611,
+        2587,
+        2304,
+        2184,
+        1955,
+        1552,
+        1380,
+        345,
+        266,
+        213,
+        144,
+        139,
+        115,
+        38,
+        37,
+        34,
+        3,
+        2,
+        1.06,
+        0.115,
+        0.005,
+        0.003,
+        0.001,
+        0.0003,
+        0.0002,
+        0.0001,
+        0.000045,
+        0.000026
+      ]
+
+      const events = [
+        "The Earth was formed",
+        "The moon forms after earth is hit by a planet-sized body",
+        "World's oldest rock forms",
+        "Beginning of \"life\" vis-a-vis first evidence of replicating molecules",
+        "The first infared organisms convert near infared light to sulfur or sulfate",
+        "Oxygen producing cyanobacteria emerge",
+        "Significant levels of oxygen build up in earth's atmosphere",
+        "Multicellular organisms evolve",
+        "Plants colonize land",
+        "Amphibians emerge from water",
+        "The permian-triassic extinction causes 99% of life on earth to perish",
+        "The age of the dinosaur begins",
+        "Pangea breaks apart and eventually forms 7 continents (including the one this timeline is on)",
+        "Tryanoceraus Rex and Triceraptops",
+        "K-PG mass extinction wipes out the dinosaur and 2/3rds of species",
+        "With dinosaurs gone, mammals flourish",
+        "Hominims diverge from chimps",
+        "Man discovers fire",
+        "Early humans craft cutting tools from stone",
+        "Modern humans evolve",
+        "The agricultural revolution begins",
+        "The beginning of recorded human history",
+        "Creation of human currency",
+        "The Renaissance",
+        "Harvard University founded",
+        "US declares independence",
+        "WWII",
+        "Creation of the world wide web"
+      ];
+
+      var interrupted = false;
+      var autocomplete = window['@algolia/autocomplete-js'].autocomplete
+      autocomplete({
+        container: '#autocomplete',
+        placeholder: 'Select a time ago',
+        getSources: function() {
+          return [{
+            sourceId: 'dates',
+            getItems: function(params) {
+              var query = params.query;
+              var transformed_dates = dates.map(function(date_string, index) {
+                return {label: date_string, value: date_string, index: index}
+                }).filter(function(date_string) {
+                  return date_string.label.toLowerCase().includes(query.toLowerCase());
+                });
+
+              return transformed_dates;
+            },
+            getItemInputValue: function(params) {
+              interrupted = true;
+              var item = params.item;
+
+              return item.value;
+            },
+            templates: {
+              item: function(params) {
+                var item = params.item;
+                return item.label;
+              },
+              noResults: function() {
+                return '';
+              }
+            },
+            onStateChange: function(params) {
+                console.log(params);
+            }
+          }]
+        },
+      });
+
+      var button = document.getElementsByClassName('aa-SubmitButton')[0];
+      button.addEventListener('click', function() {
+        interrupted = true;
+        var input = document.getElementsByClassName('aa-Input')[0];
+        var text_selected = input.value;
+
+        if (text_selected == '')
+          return;
+
+        console.log('Event listener triggered: ' + text_selected);
+
+        var index = 0;
+        for (var i = 0; i < dates.length; i++) {
+          console.log('inside for loop');
+          if (dates[i] == text_selected) {
+            console.log('inside if statement');
+            index = i;
+            break;
+          }
+        }
+        console.log('Index: ' + index);
+
+        // Update text above dates slider
+        var date_to_show = dates[index];
+        document.getElementById('dates').innerHTML = date_to_show;
+
+        // Update text above distances slider
+        var distance_to_show = distances[index];
+        document.getElementById('distances').innerHTML = distance_to_show;
+
+        // Update text above events slider
+        var event_to_show = events[index];
+        document.getElementById('events').innerHTML = event_to_show;
+
+        // Update distances and events slider
+        slider1.value = index;
+        slider2.value = index;
+        slider3.value = index;
+
+        // Get the right index to look for the right coordinate below
+        if (index % 2 == 0)
+          index = index / 2 * 19 + Math.ceil((index - 1)/2) * 18;
+        else
+          index = Math.ceil(index / 2) * 18 + (index - 1)/2 * 19;
+
+        // Get the right coordinate
+        var new_coordinate = route.features[0].geometry.coordinates[index];
+
+        // Update the point with the right coordinate
+        point.features[0].geometry.coordinates = new_coordinate
+
+        // Repaint if necessary
+        map.getSource('point').setData(point);
+      });
+
+      document.getElementById('dates').innerHTML = dates[0];
+      document.getElementById('distances').innerHTML = distances[0];
+      document.getElementById('events').innerHTML = events[0];
+
+      var emoji_selector = document.getElementById('emoji_selector');
+      var slider1 = document.getElementById('slider1');
+      var slider2 = document.getElementById('slider2');
+      var slider3 = document.getElementById('slider3');
+
+      // Emoji chooser
+      emoji_selector.addEventListener('change', (e) => {
+        console.log(emoji_selector.value);
+        var index = parseInt(emoji_selector.value);
+
+        // Update text above dates slider
+        var date_to_show = dates[index];
+        document.getElementById('dates').innerHTML = date_to_show;
+
+        // Update text above distances slider
+        var distance_to_show = distances[index];
+        document.getElementById('distances').innerHTML = distance_to_show;
+
+        // Update text above events slider
+        var event_to_show = events[index];
+        document.getElementById('events').innerHTML = event_to_show;
+
+        // Update distances and events slider
+        slider1.value = index;
+        slider2.value = index;
+        slider3.value = index;
+
+        // Get the right index to look for the right coordinate below
+        if (index % 2 == 0)
+          index = index / 2 * 19 + Math.ceil((index - 1)/2) * 18;
+        else
+          index = Math.ceil(index / 2) * 18 + (index - 1)/2 * 19;
+
+        // Get the right coordinate
+        var new_coordinate = route.features[0].geometry.coordinates[index];
+
+        // Update the point with the right coordinate
+        point.features[0].geometry.coordinates = new_coordinate
+
+        // Repaint if necessary
+        map.getSource('point').setData(point);
+      });
+
+      // Dates slider
+      slider1.addEventListener('input', (e) => {
+        // Stop animation
+        interrupted = true;
+
+        var index = parseInt(e.target.value, 0); // between 0 and 27
+
+        // Update text above dates slider
+        var date_to_show = dates[index];
+        document.getElementById('dates').innerHTML = date_to_show;
+
+        // Update text above distances slider
+        var distance_to_show = distances[index];
+        document.getElementById('distances').innerHTML = distance_to_show;
+
+        // Update text above events slider
+        var event_to_show = events[index];
+        document.getElementById('events').innerHTML = event_to_show;
+
+        // Update distances and events slider
+        slider2.value = index;
+        slider3.value = index;
+
+        // Get the right index to look for the right coordinate below
+        if (index % 2 == 0)
+          index = index / 2 * 19 + Math.ceil((index - 1)/2) * 18;
+        else
+          index = Math.ceil(index / 2) * 18 + (index - 1)/2 * 19;
+
+        // Get the right coordinate
+        var new_coordinate = route.features[0].geometry.coordinates[index];
+
+        // Update the point with the right coordinate
+        point.features[0].geometry.coordinates = new_coordinate
+
+        // Repaint if necessary
+        map.getSource('point').setData(point);
+      });
+
+      // Distances slider
+      slider2.addEventListener('input', (e) => {
+        // Stop animation
+        interrupted = true;
+
+        var index = parseInt(e.target.value, 0); // between 0 and 27
+
+        var date_to_show = dates[index];
+        document.getElementById('dates').innerHTML = date_to_show;
+
+        var distance_to_show = distances[index];
+        document.getElementById('distances').innerHTML = distance_to_show;
+
+        var event_to_show = events[index];
+        document.getElementById('events').innerHTML = event_to_show;
+
+        slider1.value = index;
+        slider3.value = index;
+
+        // Get the right index to look for the right coordinate below
+        if (index % 2 == 0)
+          index = index / 2 * 19 + Math.ceil((index - 1)/2) * 18;
+        else
+          index = Math.ceil(index / 2) * 18 + (index - 1)/2 * 19;
+
+        // Get the right coordinate
+        var new_coordinate = route.features[0].geometry.coordinates[index];
+
+        // Update the point with the right coordinate
+        point.features[0].geometry.coordinates = new_coordinate
+
+        // Repaint if necessary
+        map.getSource('point').setData(point);
+      });
+
+      // Events slider
+      slider3.addEventListener('input', (e) => {
+        // Stop animation
+        interrupted = true;
+
+        var index = parseInt(e.target.value, 0); // between 0 and 27
+
+        var date_to_show = dates[index];
+        document.getElementById('dates').innerHTML = date_to_show;
+
+        var distance_to_show = distances[index];
+        document.getElementById('distances').innerHTML = distance_to_show;
+
+        var event_to_show = events[index];
+        document.getElementById('events').innerHTML = event_to_show;
+
+        slider1.value = index;
+        slider2.value = index;
+
+        // Get the right index to look for the right coordinate below
+        if (index % 2 == 0)
+          index = index / 2 * 19 + Math.ceil((index - 1)/2) * 18;
+        else
+          index = Math.ceil(index / 2) * 18 + (index - 1)/2 * 19;
+
+        // Get the right coordinate
+        var new_coordinate = route.features[0].geometry.coordinates[index];
+
+        // Update the point with the right coordinate
+        point.features[0].geometry.coordinates = new_coordinate
+
+        // Repaint if necessary
+        map.getSource('point').setData(point);
+      });
+
+      // LAX
+      const origin = [-118.410042, 33.942791];
+
+      // BOS
+      const destination = [-71.022362, 42.366978];
+
+      // A simple line from origin to destination.
+      const route = {
+              'type': 'FeatureCollection',
+              'features': [
+                      {
+                              'type': 'Feature',
+                              'geometry': {
+                                      'type': 'LineString',
+                                      'coordinates': [origin, destination]
+                                    }
+                            }
+                    ]
+            };
+
+      // A single point that animates along the route.
+      // Coordinates are initially set to origin.
+      const point = {
+              'type': 'FeatureCollection',
+              'features': [
+                      {
+                              'type': 'Feature',
+                              'properties': {},
+                              'geometry': {
+                                      'type': 'Point',
+                                      'coordinates': origin
+                                    }
+                            }
+                    ]
+            };
+
+      // Calculate the distance in kilometers between route start/end point.
+      const lineDistance = turf.length(route.features[0]);
+
+      const arc = [];
+
+      // Number of steps to use in the arc and animation, more steps means
+      // a smoother arc and animation, but too many steps will result in a
+      // low frame rate
+      const steps = 500;
+
+      // Draw an arc between the `origin` & `destination` of the two points
+      for (let i = 0; i < lineDistance; i += lineDistance / steps) {
+              const segment = turf.along(route.features[0], i);
+              arc.push(segment.geometry.coordinates);
+            }
+
+      // Update the route with calculated arc coordinates
+      route.features[0].geometry.coordinates = arc;
+
+      // Used to increment the value of the point measurement against the route.
+      let counter = 0;
+
+      map.on('load', () => {
+              // Add a source and layer displaying a point which will be animated in a circle.
+              map.addSource('route', {
+                      'type': 'geojson',
+                      'data': route
+                    });
+
+              map.addSource('point', {
+                      'type': 'geojson',
+                      'data': point
+                    });
+
+              map.addLayer({
+                      'id': 'route',
+                      'source': 'route',
+                      'type': 'line',
+                      'paint': {
+                              'line-width': 2,
+                              'line-color': '#007cbf'
+                            }
+                    });
+
+              map.addLayer({
+                      'id': 'point',
+                      'source': 'point',
+                      'type': 'symbol',
+                      'layout': {
+                              // This icon is a part of the Mapbox Streets style.
+                              // To view all images available in a Mapbox style, open
+                              // the style in Mapbox Studio and click the "Images" tab.
+                              // To add a new image to the style at runtime see
+                              // https://docs.mapbox.com/mapbox-gl-js/example/add-image/
+                              'icon-image': 'airport-15',
+                              'icon-rotate': ['get', 'bearing'],
+                              'icon-rotation-alignment': 'map',
+                              'icon-allow-overlap': true,
+                              'icon-ignore-placement': true,
+                              'icon-size': 2
+                            }
+                    });
+
+              function animate() {
+                      const start =
+                        route.features[0].geometry.coordinates[
+                                counter >= steps ? counter - 1 : counter
+                              ];
+                      const end =
+                        route.features[0].geometry.coordinates[
+                                counter >= steps ? counter : counter + 1
+                              ];
+                      if (!start || !end) return;
+
+                      // Update point geometry to a new position based on counter denoting
+                      // the index to access the arc
+                      point.features[0].geometry.coordinates =
+                        route.features[0].geometry.coordinates[counter];
+
+                      // Calculate the bearing to ensure the icon is rotated to match the route arc
+                      // The bearing is calculated between the current point and the next point, except
+                      // at the end of the arc, which uses the previous point and the current point
+                      point.features[0].properties.bearing = turf.bearing(
+                              turf.point(start),
+                              turf.point(end)
+                            );
+
+                      // Update the source with this new data
+                      map.getSource('point').setData(point);
+
+                      // Also update the sliders
+                      // Get the right index to look for the right coordinate below
+                      var index = null;
+                      if (counter % 2 == 0)
+                        index = Math.floor(counter / 18.5)
+                      else
+                        index = Math.floor((2*counter + 1)/37)
+
+                      // Update text above dates slider
+                      var date_to_show = dates[index];
+                      document.getElementById('dates').innerHTML = date_to_show;
+
+                      // Update text above distances slider
+                      var distance_to_show = distances[index];
+                      document.getElementById('distances').innerHTML = distance_to_show;
+
+                      // Update text above events slider
+                      var event_to_show = events[index];
+                      document.getElementById('events').innerHTML = event_to_show;
+
+                      // Update distances and events slider
+                      slider1.value = index;
+                      slider2.value = index;
+                      slider3.value = index;
+
+                      // Request the next frame of animation as long as the end has not been reached
+                      if (counter < steps && !interrupted) {
+                              requestAnimationFrame(animate);
+                            }
+
+                      counter = counter + 1;
+                    }
+
+              document.getElementById('replay').addEventListener('click', () => {
+                      // Set the coordinates of the original point back to origin
+                      point.features[0].geometry.coordinates = origin;
+
+                      // Update the source layer
+                      map.getSource('point').setData(point);
+
+                      // Reset the counter
+                      counter = 0;
+
+                      // Restart the animation
+                      animate(counter);
+                    });
+
+              // Start the animation
+              animate(counter);
+            });
+    </script>
+
+  </body>
+</html>
