@@ -1,19 +1,19 @@
-## Soaring through the Skies of Evolutionary History - Documentation
+# Soaring through the Skies of Evolutionary History: Documentation
 
-### Description ###
+## Description ##
 
 This visualization illustrates the history of the universe within the persepctive of a flight from Los Angeles International Airport (LAX) to Boston Logan (BOS).
 
 
-### Motivation ###
+## Motivation ##
 
 I created this project as a Mother's Day gift to my mom, an Evolutionary Biology professor at UCLA. My mom has often encouraged me and her students to look beyond human exceptionalism and appreciate how small a role humankind has played within the history and evolution of the universe. Over break, she showed me a video infographic from Business Insider which she loved and wanted to use for her classes so I decided that I would secretly create a similar visualization for this CS course's final project. I believe this project is a fitting blend of my personal research interests in cartography and my mom's Evolutionary Biology work. 
 
 Given that the deadline for this project falls on Mother's Day, I hope this will make for both a wonderful end to this CS course as well as a hopefully well-recieved Mother's Day gift for my mom (fingers crossed!).
 
-### Components ####
- 
-*I changed the original graphic from LAX to JFK to a flight path from LAX to BOS which more accurately reflected my own journey from Los Angeles originally to Cambridge, MA. A number of changes were added from the original infographic video which include but not limited to the manipulatability of time/event sliders, emoji-based stopping points, and functionality for other flight paths to name just a few.*
+## Components ##
+
+ *The graphic that inspired this work was changed considerably for this project. To start, the flight path was changed from LAX to JFK to a flight path from LAX to BOS which more accurately reflected my own journey from Los Angeles originally to Cambridge, MA. A number of changes were added from the original infographic video which include but not limited to the manipulatability of time/event sliders, emoji-based stopping points, and functionality for other flight paths to name just a few.*
 
 **1. Animated Flight Path**
 
@@ -44,19 +44,19 @@ The search bar allows the user viewing the visualization to choose a point on th
 As the flight makes its way across the continental United States, zoom in/out or pan along the plane's journey to see where along the evolutionary timeline these cities fall. *Note:* This may be of interest as the flight begins to reach its final destination on the tarmack at Boston Logan. Stopping points on the timeline are closer together and therefore may be more visible when one zooms in or pans to a sideview.  
 
 
-### Setup ###
+## Setup ##
 
 **Create a Mapbox Account / Access Token** 
 First, you'll need to get a Mapbox API Account token. Given that a Mapbox API token should be kept private, you as the user of the index.html file should get one for yourself in order to view this project. To do this: 
-* Sign up for a Mapbox account (you will not be charged in any way for getting an access token) 
-* Answer the few quick prompts re who you are (ex. Student, using Mapbox for data vis etc.) 
-* Copy paste your Mapbox API token here: 
+* Sign up for a Mapbox account [at this link](https://account.mapbox.com/auth/signup "at this link") (you will not be charged in any way for getting an access token) 
+* After providing a username/password answer a couple of quick prompts re who you are (ex. Student, using Mapbox for data vis etc.) 
+* Copy paste your Mapbox API token on line XXX in replacement of "MAPBOX ACCESS TOKEN HERE": 
 
 Copy/paste your Mapbox API token here :  `code()`
 
 The setup for this is very simple! Just open index.html in a browser.
 
-### Libraries included ### 
+## Libraries Included ## 
 
 * **Mapbox GL JS** is a JavaScript library for immserve vector maps with real-time styling on the Web. Mapbox served as the starting point for this project to create the initial flight path animation this project made use of the Mapbox JavaScript Graphics Library to initialize the flight path from LAX to BOS. 
 
@@ -65,14 +65,12 @@ The setup for this is very simple! Just open index.html in a browser.
 * **Algolia's Autocomplete** provides a JavaScript autocomplete library for building autocomplete experiences for search. I used this JS library to build the search bar for this project and autocomplete the amount of years ago the user is searching for.  
 
 
-### Credits / Acknowledgements ###
+## Credits / Acknowledgements ##
 
 Acknowledgements to the class staff who helped me along problem sets leading up to this project especially with respect to the problem set in Week 8 which focused on web development. 
 
-A big thanks to the original creators of this Business Insider data visualizaiton, 
+A big thanks to the original creators of this Business Insider data visualizaiton from which this project was expanded. I found the contact info for Alex Kuzoian and was able to correspond with him to better appreciate where the timeline stopping points existed to then remap those events for my project (with a number of changes made to the dataset of timeline points as well). While Alex wasn't able to provide the data for the animaiton he was kind enough to point me in the direction of the National Geographic and New Scientist resources they used to help create the visualization in 2015. 
 
-I would alos like to acknowledge, the OG SOS search engine that is StackOverflow in creating this work. I owe a debt of thanks to the numerous magnanimous internet strangers who provided answers specifically those surrounding how to use template in algolia's autocomplete, JS syntax, and troubleshooting with Mapbox/Turf.js functions.
+I would also like to acknowledge, the OG SOS search engine that is StackOverflow in creating this work. I owe a debt of thanks to the numerous magnanimous internet strangers who provided answers specifically those surrounding how to use template in algolia's autocomplete, JS syntax, and troubleshooting with Mapbox/Turf.js functions.
 
-  * StackOverflow links: how to search a substring in Javascript, how to use templates in algolia's autocomplete
-  * Where emojis pulled from
-  * 
+Following the final lecture on the Unicode Emoji Subcommittee, I would like to extend my thanks to Unicode's incredible work in cataloging the official Emoji charts from which I was able to retrieve the specfic emojis used in this work. 
