@@ -13,7 +13,7 @@ Given that the deadline for this project falls on Mother's Day, I hope this will
 
 ### Components ####
  
-I changed the original graphic from LAX to JFK to a flight path from LAX to BOS which more accurately reflected my own journey from Los Angeles originally to Cambridge, MA. A significant number of changes were added in creating this project to the orginial infographic including but not limited to the manipulatability of time/event sliders, emoji-based stopping points, and functionality for other flight paths to name just a few.
+*I changed the original graphic from LAX to JFK to a flight path from LAX to BOS which more accurately reflected my own journey from Los Angeles originally to Cambridge, MA. A number of changes were added from the original infographic video which include but not limited to the manipulatability of time/event sliders, emoji-based stopping points, and functionality for other flight paths to name just a few.*
 
 **1. Animated Flight Path**
 
@@ -54,9 +54,16 @@ First, you'll need to get a Mapbox API Account token. Given that a Mapbox API to
 
 Copy/paste your Mapbox API token here :  `code()`
 
-The setup for this is very simple! Just open index.html in a browser
-* Libraries included
-  * Mapbox
+The setup for this is very simple! Just open index.html in a browser.
+
+### Libraries included ### 
+
+* Mapbox 
+Mapbox GL JS is a JavaScript library for immserve vector maps with real-time styling on the Web. Mapbox served as the starting point for this project to create the initial flight path animation this project made use of the Mapbox JavaScript Graphics Library to initialize the flight path from LAX to BOS. 
+
+* Turf.js 
+Turf.js is an open source JavaScript library used for geospatial analysis which allows for spatial operations preformed in the browser. In this case, Turf.js provides the JS function which is used to animate the plane along the line.
+
   * Algolia's Autocomplete
 
 * Credits / Acknowledgements
