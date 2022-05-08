@@ -138,7 +138,7 @@
 
         </div>
         <div class="map-overlay-inner">
-          <h2>Select a timeline point</h2>
+          <h2>Select a point on the timeline</h2>
           <div id="autocomplete"></div>
         </div>
         <div class="map-overlay-inner">
@@ -172,381 +172,6 @@
               center: [-96, 37.8],
               zoom: 3
             });
-
-      const dates = [
-        "4.54 billion years ago",
-        "4.52 billion years ago",
-        "3.95 billion years ago",
-        "3.8 billion years ago",
-        "3.40 billion years ago",
-        "2.70 billion years ago",
-        "2.50 billion years ago",
-        "600 million years ago",
-        "465 million years ago",
-        "370 million years ago",
-        "250 million years ago",
-        "240 million years ago",
-        "200 million years ago",
-        "67 million years ago",
-        "66 million years ago",
-        "60 million years ago",
-        "6 million years ago",
-        "1 million years ago",
-        "1.8 million years ago",
-        "200,000 years ago",
-        "10,000 years ago",
-        "5,500 years ago",
-        "2,600 years ago",
-        "622 years ago",
-        "386 years ago",
-        "239 years ago",
-        "78 years ago",
-        "49 years ago"
-      ];
-
-      const distances = [
-        "2,611 miles",
-        "2,587 miles",
-        "2,304 miles",
-        "2,184 miles",
-        "1,955 miles",
-        "1,552 miles",
-        "1,380 miles",
-        "345 miles",
-        "266 miles",
-        "213 miles",
-        "144 miles",
-        "139 miles",
-        "115 miles",
-        "38 miles",
-        "37 miles",
-        "34 miles",
-        "3 miles",
-        "2 miles",
-        "1.06 miles",
-        "0.115 miles",
-        "0.005 miles",
-        "0.003 miles",
-        "0.001 miles",
-        "0.0003 miles",
-        "0.0002 miles",
-        "0.0001 miles",
-        "0.000045 miles",
-        "0.000026 miles"
-      ];
-
-      const distances_for_math = [
-        2611,
-        2587,
-        2304,
-        2184,
-        1955,
-        1552,
-        1380,
-        345,
-        266,
-        213,
-        144,
-        139,
-        115,
-        38,
-        37,
-        34,
-        3,
-        2,
-        1.06,
-        0.115,
-        0.005,
-        0.003,
-        0.001,
-        0.0003,
-        0.0002,
-        0.0001,
-        0.000045,
-        0.000026
-      ]
-
-      const events = [
-        "The Earth was formed",
-        "The moon forms after earth is hit by a planet-sized body",
-        "World's oldest rock forms",
-        "Beginning of \"life\" vis-a-vis first evidence of replicating molecules",
-        "The first infared organisms convert near infared light to sulfur or sulfate",
-        "Oxygen producing cyanobacteria emerge",
-        "Significant levels of oxygen build up in earth's atmosphere",
-        "Multicellular organisms evolve",
-        "Plants colonize land",
-        "Amphibians emerge from water",
-        "The permian-triassic extinction causes 99% of life on earth to perish",
-        "The age of the dinosaur begins",
-        "Pangea breaks apart and eventually forms 7 continents (including the one this timeline is on)",
-        "Tryanoceraus Rex and Triceraptops",
-        "K-PG mass extinction wipes out the dinosaur and 2/3rds of species",
-        "With dinosaurs gone, mammals flourish",
-        "Hominims diverge from chimps",
-        "Man discovers fire",
-        "Early humans craft cutting tools from stone",
-        "Modern humans evolve",
-        "The agricultural revolution begins",
-        "The beginning of recorded human history",
-        "Creation of human currency",
-        "The Renaissance",
-        "Harvard University founded",
-        "US declares independence",
-        "WWII",
-        "Creation of the world wide web"
-      ];
-
-      var interrupted = false;
-      var autocomplete = window['@algolia/autocomplete-js'].autocomplete
-      autocomplete({
-        container: '#autocomplete',
-        placeholder: 'Select a time ago',
-        getSources: function() {
-          return [{
-            sourceId: 'dates',
-            getItems: function(params) {
-              var query = params.query;
-              var transformed_dates = dates.map(function(date_string, index) {
-                return {label: date_string, value: date_string, index: index}
-                }).filter(function(date_string) {
-                  return date_string.label.toLowerCase().includes(query.toLowerCase());
-                });
-
-              return transformed_dates;
-            },
-            getItemInputValue: function(params) {
-              interrupted = true;
-              var item = params.item;
-
-              return item.value;
-            },
-            templates: {
-              item: function(params) {
-                var item = params.item;
-                return item.label;
-              },
-              noResults: function() {
-                return '';
-              }
-            },
-            onStateChange: function(params) {
-                console.log(params);
-            }
-          }]
-        },
-      });
-
-      var button = document.getElementsByClassName('aa-SubmitButton')[0];
-      button.addEventListener('click', function() {
-        interrupted = true;
-        var input = document.getElementsByClassName('aa-Input')[0];
-        var text_selected = input.value;
-
-        if (text_selected == '')
-          return;
-
-        console.log('Event listener triggered: ' + text_selected);
-
-        var index = 0;
-        for (var i = 0; i < dates.length; i++) {
-          console.log('inside for loop');
-          if (dates[i] == text_selected) {
-            console.log('inside if statement');
-            index = i;
-            break;
-          }
-        }
-        console.log('Index: ' + index);
-
-        // Update text above dates slider
-        var date_to_show = dates[index];
-        document.getElementById('dates').innerHTML = date_to_show;
-
-        // Update text above distances slider
-        var distance_to_show = distances[index];
-        document.getElementById('distances').innerHTML = distance_to_show;
-
-        // Update text above events slider
-        var event_to_show = events[index];
-        document.getElementById('events').innerHTML = event_to_show;
-
-        // Update distances and events slider
-        slider1.value = index;
-        slider2.value = index;
-        slider3.value = index;
-
-        // Get the right index to look for the right coordinate below
-        if (index % 2 == 0)
-          index = index / 2 * 19 + Math.ceil((index - 1)/2) * 18;
-        else
-          index = Math.ceil(index / 2) * 18 + (index - 1)/2 * 19;
-
-        // Get the right coordinate
-        var new_coordinate = route.features[0].geometry.coordinates[index];
-
-        // Update the point with the right coordinate
-        point.features[0].geometry.coordinates = new_coordinate
-
-        // Repaint if necessary
-        map.getSource('point').setData(point);
-      });
-
-      document.getElementById('dates').innerHTML = dates[0];
-      document.getElementById('distances').innerHTML = distances[0];
-      document.getElementById('events').innerHTML = events[0];
-
-      var emoji_selector = document.getElementById('emoji_selector');
-      var slider1 = document.getElementById('slider1');
-      var slider2 = document.getElementById('slider2');
-      var slider3 = document.getElementById('slider3');
-
-      // Emoji chooser
-      emoji_selector.addEventListener('change', (e) => {
-        console.log(emoji_selector.value);
-        var index = parseInt(emoji_selector.value);
-
-        // Update text above dates slider
-        var date_to_show = dates[index];
-        document.getElementById('dates').innerHTML = date_to_show;
-
-        // Update text above distances slider
-        var distance_to_show = distances[index];
-        document.getElementById('distances').innerHTML = distance_to_show;
-
-        // Update text above events slider
-        var event_to_show = events[index];
-        document.getElementById('events').innerHTML = event_to_show;
-
-        // Update distances and events slider
-        slider1.value = index;
-        slider2.value = index;
-        slider3.value = index;
-
-        // Get the right index to look for the right coordinate below
-        if (index % 2 == 0)
-          index = index / 2 * 19 + Math.ceil((index - 1)/2) * 18;
-        else
-          index = Math.ceil(index / 2) * 18 + (index - 1)/2 * 19;
-
-        // Get the right coordinate
-        var new_coordinate = route.features[0].geometry.coordinates[index];
-
-        // Update the point with the right coordinate
-        point.features[0].geometry.coordinates = new_coordinate
-
-        // Repaint if necessary
-        map.getSource('point').setData(point);
-      });
-
-      // Dates slider
-      slider1.addEventListener('input', (e) => {
-        // Stop animation
-        interrupted = true;
-
-        var index = parseInt(e.target.value, 0); // between 0 and 27
-
-        // Update text above dates slider
-        var date_to_show = dates[index];
-        document.getElementById('dates').innerHTML = date_to_show;
-
-        // Update text above distances slider
-        var distance_to_show = distances[index];
-        document.getElementById('distances').innerHTML = distance_to_show;
-
-        // Update text above events slider
-        var event_to_show = events[index];
-        document.getElementById('events').innerHTML = event_to_show;
-
-        // Update distances and events slider
-        slider2.value = index;
-        slider3.value = index;
-
-        // Get the right index to look for the right coordinate below
-        if (index % 2 == 0)
-          index = index / 2 * 19 + Math.ceil((index - 1)/2) * 18;
-        else
-          index = Math.ceil(index / 2) * 18 + (index - 1)/2 * 19;
-
-        // Get the right coordinate
-        var new_coordinate = route.features[0].geometry.coordinates[index];
-
-        // Update the point with the right coordinate
-        point.features[0].geometry.coordinates = new_coordinate
-
-        // Repaint if necessary
-        map.getSource('point').setData(point);
-      });
-
-      // Distances slider
-      slider2.addEventListener('input', (e) => {
-        // Stop animation
-        interrupted = true;
-
-        var index = parseInt(e.target.value, 0); // between 0 and 27
-
-        var date_to_show = dates[index];
-        document.getElementById('dates').innerHTML = date_to_show;
-
-        var distance_to_show = distances[index];
-        document.getElementById('distances').innerHTML = distance_to_show;
-
-        var event_to_show = events[index];
-        document.getElementById('events').innerHTML = event_to_show;
-
-        slider1.value = index;
-        slider3.value = index;
-
-        // Get the right index to look for the right coordinate below
-        if (index % 2 == 0)
-          index = index / 2 * 19 + Math.ceil((index - 1)/2) * 18;
-        else
-          index = Math.ceil(index / 2) * 18 + (index - 1)/2 * 19;
-
-        // Get the right coordinate
-        var new_coordinate = route.features[0].geometry.coordinates[index];
-
-        // Update the point with the right coordinate
-        point.features[0].geometry.coordinates = new_coordinate
-
-        // Repaint if necessary
-        map.getSource('point').setData(point);
-      });
-
-      // Events slider
-      slider3.addEventListener('input', (e) => {
-        // Stop animation
-        interrupted = true;
-
-        var index = parseInt(e.target.value, 0); // between 0 and 27
-
-        var date_to_show = dates[index];
-        document.getElementById('dates').innerHTML = date_to_show;
-
-        var distance_to_show = distances[index];
-        document.getElementById('distances').innerHTML = distance_to_show;
-
-        var event_to_show = events[index];
-        document.getElementById('events').innerHTML = event_to_show;
-
-        slider1.value = index;
-        slider2.value = index;
-
-        // Get the right index to look for the right coordinate below
-        if (index % 2 == 0)
-          index = index / 2 * 19 + Math.ceil((index - 1)/2) * 18;
-        else
-          index = Math.ceil(index / 2) * 18 + (index - 1)/2 * 19;
-
-        // Get the right coordinate
-        var new_coordinate = route.features[0].geometry.coordinates[index];
-
-        // Update the point with the right coordinate
-        point.features[0].geometry.coordinates = new_coordinate
-
-        // Repaint if necessary
-        map.getSource('point').setData(point);
-      });
 
       // LAX
       const origin = [-118.410042, 33.942791];
@@ -584,22 +209,308 @@
                     ]
             };
 
-      // Calculate the distance in kilometers between route start/end point.
-      const lineDistance = turf.length(route.features[0]);
+      // Calculate the distance in kilometers (and conver to miles) between route start/end point.
+      const lineDistance = turf.length(route.features[0])*0.621371
+      console.log('LineDistance = ' + lineDistance)
+
+      const entries = [
+        {'date': '4.54 billion years ago', 'year': -4.54e9, 'event': 'The Earth was formed'},
+        {'date': '4.52 billion years ago', 'year': -4.52e9, 'event': "The moon forms after earth is hit by a planet-sized body"},
+        {'date': "3.95 billion years ago", 'year': -3.95e9, 'event': "World's oldest rock forms"},
+        {'date': "3.8 billion years ago", 'year': -3.8e9, 'event': "Beginning of \"life\" vis-a-vis first evidence of replicating molecules"},
+        {'date': "3.40 billion years ago", 'year': -3.4e9, 'event': "The first infared organisms convert near infared light to sulfur or sulfate"},
+        {'date': "2.70 billion years ago", 'year': -2.70e9, 'event': "Oxygen producing cyanobacteria emerge"},
+        {'date': "2.50 billion years ago", 'year': -2.5e9, 'event': "Significant levels of oxygen build up in earth's atmosphere"},
+        {'date': "600 million years ago", 'year': -600e6, 'event': "Multicellular organisms evolve"},
+        {'date': "465 million years ago", 'year': -465e6, 'event': "Plants colonize land"},
+        {'date': "370 million years ago", 'year': -370e6, 'event': "Amphibians emerge from water"},
+        {'date': "250 million years ago", 'year': -250e6, 'event': "The permian-triassic extinction causes 99% of life on earth to perish"},
+        {'date': "240 million years ago", 'year': -240e6, 'event': "The age of the dinosaur begins"},
+        {'date': "200 million years ago", 'year': -200e6, 'event': "Pangaea breaks apart and eventually forms 7 continents (including the one this timeline is on)"},
+        {'date': "67 million years ago", 'year': -67e6, 'event': "Tyrannosaurus Rex and Triceraptops"},
+        {'date': "66 million years ago", 'year': -66e6, 'event': "K-PG mass extinction wipes out the dinosaur and 2/3rds of species"},
+        {'date': "60 million years ago", 'year': -60e6, 'event': "With dinosaurs gone, mammals flourish"},
+        {'date': "6 million years ago", 'year': -6e6, 'event': "Hominims diverge from chimps"},
+        {'date': "1.8 million years ago", 'year': -1.8e6, 'event': "Man discovers fire"},
+        {'date': "1 million years ago", 'year': -1e6, 'event': "Early humans craft cutting tools from stone"},
+        {'date': "200,000 years ago", 'year': -198e3, 'event': "Modern humans evolve"},
+        {'date': "10,000 years ago", 'year': -8e3, 'event': "The agricultural revolution begins"},
+        {'date': "5,500 years ago", 'year': -3.5e3, 'event': "The beginning of recorded human history"},
+        {'date': "2,600 years ago", 'year': -600, 'event': "Creation of human currency"},
+        {'date': "622 years ago", 'year': 1400, 'event': "The Renaissance"},
+        {'date': "386 years ago", 'year': 1636, 'event': "Harvard University founded"},
+        {'date': "239 years ago", 'year': 1776, 'event': "U.S. declares independence"},
+        {'date': "78 years ago", 'year': 1941, 'event': "World War II"},
+        {'date': "49 years ago", 'year': 1973, 'event': "Creation of the world wide web"},
+      ]
+
+      const dates_entry = []
+      const years_entry = []
+      const events_entry = []
+      const dists_entry = []
+      const dist_labels_entry = []
+      lineDist = lineDistance
+      timeRange = entries[entries.length-1]['year'] - entries[0]['year']
+      timeStart = entries[0]['year']
+      console.log('time range = ' + timeRange)
+      for (let i = 0; i < entries.length; i++) {
+        dates_entry.push(entries[i]['date'])
+        years_entry.push(entries[i]['year'])
+        events_entry.push(entries[i]['event'])
+        dist_to_dest = lineDist - lineDist*(entries[i]['year'] - timeStart)/timeRange
+        dists_entry.push(dist_to_dest)
+        dist_labels_entry.push(String(dist_to_dest.toPrecision(4)) + ' miles')
+      }
+      console.log(dists_entry)
+      console.log(dist_labels_entry)
+      
+      var interrupted = false;
+      var autocomplete = window['@algolia/autocomplete-js'].autocomplete
+      autocomplete({
+        container: '#autocomplete',
+        placeholder: 'search here',
+        getSources: function() {
+          return [{
+            sourceId: 'dates',
+            getItems: function(params) {
+              var query = params.query;
+              var transformed_dates = dates_entry.map(function(date_string, index) {
+                return {label: date_string, value: date_string, index: index}
+                }).filter(function(date_string) {
+                  return date_string.label.toLowerCase().includes(query.toLowerCase());
+                });
+
+              return transformed_dates;
+            },
+            getItemInputValue: function(params) {
+              interrupted = true;
+              var item = params.item;
+
+              return item.value;
+            },
+            templates: {
+              item: function(params) {
+                var item = params.item;
+                return item.label;
+              },
+              noResults: function() {
+                return '';
+              }
+            },
+            onStateChange: function(params) {
+                console.log(params);
+            }
+          }]
+        },
+      });
+
+      // Implement user search
+      var button = document.getElementsByClassName('aa-SubmitButton')[0];
+      button.addEventListener('click', function() {
+        interrupted = true;
+        var input = document.getElementsByClassName('aa-Input')[0];
+        var text_selected = input.value;
+
+        if (text_selected == '')
+          return;
+
+        console.log('Event listener triggered: ' + text_selected);
+
+        var index = 0;
+        for (var i = 0; i < dates_entry.length; i++) {
+          console.log('inside for loop');
+          if (dates_entry[i] == text_selected) {
+            console.log('inside if statement');
+            index = i;
+            break;
+          }
+        }
+        console.log('Index: ' + index);
+
+        // Update text above dates slider
+        var date_to_show = dates_entry[index];
+        document.getElementById('dates').innerHTML = date_to_show;
+
+        // Update text above distances slider
+        var distance_to_show = dist_labels_entry[index];
+        document.getElementById('distances').innerHTML = distance_to_show;
+
+        // Update text above events slider
+        var event_to_show = events_entry[index];
+        document.getElementById('events').innerHTML = event_to_show;
+
+        // Update distances and events slider
+        slider1.value = index;
+        slider2.value = index;
+        slider3.value = index;
+
+        // Get the new coordinate
+        var new_coordinate = route.features[0].geometry.coordinates[index*steps_inter];
+
+        // Update the point with the new coordinate
+        point.features[0].geometry.coordinates = new_coordinate
+
+        // Repaint if necessary
+        map.getSource('point').setData(point);
+      });
+
+      document.getElementById('dates').innerHTML = dates_entry[0];
+      document.getElementById('distances').innerHTML = dist_labels_entry[0];
+      document.getElementById('events').innerHTML = events_entry[0];
+
+      var emoji_selector = document.getElementById('emoji_selector');
+      var slider1 = document.getElementById('slider1');
+      var slider2 = document.getElementById('slider2');
+      var slider3 = document.getElementById('slider3');
+
+      // Emoji chooser
+      emoji_selector.addEventListener('change', (e) => {
+        console.log(emoji_selector.value);
+        var index = parseInt(emoji_selector.value);
+
+        // Update text above dates slider
+        var date_to_show = dates_entry[index];
+        document.getElementById('dates').innerHTML = date_to_show;
+
+        // Update text above distances slider
+        var distance_to_show = dist_labels_entry[index];
+        document.getElementById('distances').innerHTML = distance_to_show;
+
+        // Update text above events slider
+        var event_to_show = events_entry[index];
+        document.getElementById('events').innerHTML = event_to_show;
+
+        // Update distances and events slider
+        slider1.value = index;
+        slider2.value = index;
+        slider3.value = index;
+
+        // Get the right coordinate
+        var new_coordinate = route.features[0].geometry.coordinates[index*steps_inter];
+
+        // Update the point with the right coordinate
+        point.features[0].geometry.coordinates = new_coordinate
+
+        // Repaint if necessary
+        map.getSource('point').setData(point);
+      });
+
+      // Dates slider
+      slider1.addEventListener('input', (e) => {
+        // Stop animation
+        interrupted = true;
+
+        var index = parseInt(e.target.value, 0); // between 0 and 27
+
+        // Update text above dates slider
+        var date_to_show = dates_entry[index];
+        document.getElementById('dates').innerHTML = date_to_show;
+
+        // Update text above distances slider
+        var distance_to_show = dist_labels_entry[index];
+        document.getElementById('distances').innerHTML = distance_to_show;
+
+        // Update text above events slider
+        var event_to_show = events_entry[index];
+        document.getElementById('events').innerHTML = event_to_show;
+
+        // Update distances and events slider
+        slider2.value = index;
+        slider3.value = index;
+
+        // Get the right coordinate
+        var new_coordinate = route.features[0].geometry.coordinates[index*steps_inter];
+
+        // Update the point with the right coordinate
+        point.features[0].geometry.coordinates = new_coordinate
+
+        // Repaint if necessary
+        map.getSource('point').setData(point);
+      });
+
+      // Distances slider
+      slider2.addEventListener('input', (e) => {
+        // Stop animation
+        interrupted = true;
+
+        var index = parseInt(e.target.value, 0); // between 0 and 27
+
+        var date_to_show = dates_entry[index];
+        document.getElementById('dates').innerHTML = date_to_show;
+
+        var distance_to_show = dist_labels_entry[index];
+        document.getElementById('distances').innerHTML = distance_to_show;
+
+        var event_to_show = events_entry[index];
+        document.getElementById('events').innerHTML = event_to_show;
+
+        slider1.value = index;
+        slider3.value = index;
+
+        // Get the right coordinate
+        var new_coordinate = route.features[0].geometry.coordinates[index*steps_inter];
+
+        // Update the point with the right coordinate
+        point.features[0].geometry.coordinates = new_coordinate
+
+        // Repaint if necessary
+        map.getSource('point').setData(point);
+      });
+
+      // Events slider
+      slider3.addEventListener('input', (e) => {
+        // Stop animation
+        interrupted = true;
+
+        var index = parseInt(e.target.value, 0); // between 0 and 27
+
+        var date_to_show = dates_entry[index];
+        document.getElementById('dates').innerHTML = date_to_show;
+
+        var distance_to_show = dist_labels_entry[index];
+        document.getElementById('distances').innerHTML = distance_to_show;
+
+        var event_to_show = events_entry[index];
+        document.getElementById('events').innerHTML = event_to_show;
+
+        slider1.value = index;
+        slider2.value = index;
+
+        // Get the right coordinate
+        var new_coordinate = route.features[0].geometry.coordinates[index*steps_inter];
+
+        // Update the point with the right coordinate
+        point.features[0].geometry.coordinates = new_coordinate
+
+        // Repaint if necessary
+        map.getSource('point').setData(point);
+      });
 
       const arc = [];
 
       // Number of steps to use in the arc and animation, more steps means
       // a smoother arc and animation, but too many steps will result in a
       // low frame rate
-      const steps = 500;
+      const steps_inter = 100
+      const steps = steps_inter * (dists_entry.length-1)
 
-      // Draw an arc between the `origin` & `destination` of the two points
-      for (let i = 0; i < lineDistance; i += lineDistance / steps) {
-              const segment = turf.along(route.features[0], i);
+      var dist_total = 0
+      dists_total = []
+      console.log('calculating distances between breakpoints')
+      for (let i = 0; i < dists_entry.length - 1; i += 1) {
+          //console.log('i = ' + i)
+          // Calculate distance from current breakpoint to next breakpoint
+          dist_inter = dists_entry[i] - dists_entry[i+1]
+          // Draw an arc between the `origin` & `destination` of the two points
+          for (let j = dist_total; j < dist_total + dist_inter; j += (dist_inter / steps_inter)) {
+              const segment = turf.along(route.features[0], j*1.60934);
               arc.push(segment.geometry.coordinates);
+              //console.log('j = ' + j)
             }
-
+          dist_total += dist_inter
+          //console.log('dist_total = ' + dist_total)
+          dists_total.push(dist_total)
+        }
       // Update the route with calculated arc coordinates
       route.features[0].geometry.coordinates = arc;
 
@@ -647,6 +558,7 @@
                             }
                     });
 
+
               function animate() {
                       const start =
                         route.features[0].geometry.coordinates[
@@ -656,6 +568,7 @@
                         route.features[0].geometry.coordinates[
                                 counter >= steps ? counter : counter + 1
                               ];
+                      if (counter == steps) return;
                       if (!start || !end) return;
 
                       // Update point geometry to a new position based on counter denoting
@@ -675,23 +588,20 @@
                       map.getSource('point').setData(point);
 
                       // Also update the sliders
-                      // Get the right index to look for the right coordinate below
-                      var index = null;
-                      if (counter % 2 == 0)
-                        index = Math.floor(counter / 18.5)
-                      else
-                        index = Math.floor((2*counter + 1)/37)
+                      // Get the correct index to look for the new coordinate below
+                      if (counter % steps_inter == 0)
+                          index += 1
 
                       // Update text above dates slider
-                      var date_to_show = dates[index];
+                      var date_to_show = dates_entry[index];
                       document.getElementById('dates').innerHTML = date_to_show;
 
                       // Update text above distances slider
-                      var distance_to_show = distances[index];
+                      var distance_to_show = dist_labels_entry[index];
                       document.getElementById('distances').innerHTML = distance_to_show;
 
                       // Update text above events slider
-                      var event_to_show = events[index];
+                      var event_to_show = events_entry[index];
                       document.getElementById('events').innerHTML = event_to_show;
 
                       // Update distances and events slider
@@ -722,7 +632,8 @@
                     });
 
               // Start the animation
-              animate(counter);
+              var index = 0
+              animate(counter, index);
             });
     </script>
 
