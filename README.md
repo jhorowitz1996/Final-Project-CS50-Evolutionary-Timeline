@@ -1,4 +1,4 @@
-Documentation:
+## Documentation:
 
 * Description of project
   * Your motivations / why
