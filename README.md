@@ -58,16 +58,21 @@ The setup for this is very simple! Just open index.html in a browser.
 
 ### Libraries included ### 
 
-* Mapbox 
-Mapbox GL JS is a JavaScript library for immserve vector maps with real-time styling on the Web. Mapbox served as the starting point for this project to create the initial flight path animation this project made use of the Mapbox JavaScript Graphics Library to initialize the flight path from LAX to BOS. 
+* **Mapbox GL JS** is a JavaScript library for immserve vector maps with real-time styling on the Web. Mapbox served as the starting point for this project to create the initial flight path animation this project made use of the Mapbox JavaScript Graphics Library to initialize the flight path from LAX to BOS. 
 
-* Turf.js 
-Turf.js is an open source JavaScript library used for geospatial analysis which allows for spatial operations preformed in the browser. In this case, Turf.js provides the JS function which is used to animate the plane along the line.
+* **Turf.js** is an open source JavaScript library used for geospatial analysis which allows for spatial operations preformed in the browser. In the case of this project, Turf provides the JS function used to animate the plane along the line of its flight path.
 
-  * Algolia's Autocomplete
+* **Algolia's Autocomplete** provides a JavaScript autocomplete library for building autocomplete experiences for search. I used this JS library to build the search bar for this project and autocomplete the amount of years ago the user is searching for.  
 
-* Credits / Acknowledgements
-  * To the template used
+
+### Credits / Acknowledgements ###
+
+Acknowledgements to the class staff who helped me along problem sets leading up to this project especially with respect to the problem set in Week 8 which focused on web development. 
+
+A big thanks to the original creators of this Business Insider data visualizaiton, 
+
+I would alos like to acknowledge, the OG SOS search engine that is StackOverflow in creating this work. I owe a debt of thanks to the numerous magnanimous internet strangers who provided answers specifically those surrounding how to use template in algolia's autocomplete, JS syntax, and troubleshooting with Mapbox/Turf.js functions.
+
   * StackOverflow links: how to search a substring in Javascript, how to use templates in algolia's autocomplete
-  * Where you pulled the emoji's from
-  * The Youtube where you pulled the data from
+  * Where emojis pulled from
+  * 
