@@ -52,9 +52,9 @@ First, you'll need to get a Mapbox API Account token. Given that a Mapbox API to
 * After providing a username/password answer a couple of quick prompts re who you are (ex. Student, using Mapbox for data vis etc.) 
 * Copy paste your Mapbox API token on line XXX in replacement of "MAPBOX ACCESS TOKEN HERE": 
 
-Copy/paste your Mapbox API token here :  `code()`
+Set the value of the variable `mapboxgl.accessToken` on line 168 to your Mapbox token.
 
-The setup for this is very simple! Just open index.html in a browser.
+Then, just open index.html in a browser. Easey peasey. :) 
 
 ## Libraries Included ## 
 
