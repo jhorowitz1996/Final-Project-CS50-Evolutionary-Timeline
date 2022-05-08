@@ -7,7 +7,7 @@
   
 Below are the modfied values used to implement the project for LA to Boston instead of New York:
 
-<img width="421" alt="Screen Shot 2022-05-08 at 7 23 44 PM" src="https://user-images.githubusercontent.com/66505479/167320143-26196cd6-1f6c-4916-b3f7-ebb175bdcd44.png">
+<img width="431" alt="Screen Shot 2022-05-08 at 7 49 23 PM" src="https://user-images.githubusercontent.com/66505479/167320807-60d2326d-218f-4bd8-8dbd-419c3c7485b6.png">
 
   
   **Step 2:** My next step was to create the 3 sliders to represent the to date, distances, and events associated with the flight's path so that when you move the slider the text/numbers changed for each. To do this, I made a list of entries with each entry in the form of a dictionary with three values: 1) descriptive date, 2) year, and 3) event name. I made a modification to the html responsible for the slider interface so that the shape of the rectangle would change based on the amount of text that filled up the slider shape. 
@@ -18,10 +18,14 @@ Below are the modfied values used to implement the project for LA to Boston inst
   
   **Step 5**: I wanted to then ensure that the sliders' movement was linked to the fly-through of the plane along the US. I set the geometric coordinate of the plan along its journey to the updating steps of the index responsible for controlling the sliders' progression. I integrated the sliders depiction of points along the timeline to respond directly to the frame rate of the animation (controlled via Turf.js's animate function) so that as each point updated along the next set of coordinates, the sliders respond in turn as the speed covers each point 
   
-  **Step 6:** I then provided an additional layer of functionality via the emoji dropdown which I then also linked to the index which controls both the geometric coordinates of the plane icon as well as the placement of all three sliders. Inspired by our final lecture in class from 
+  **Step 6:** I then provided an additional layer of functionality (and fun!) via the emoji dropdown which I then also linked to the index which controls both the geometric coordinates of the plane icon as well as the placement of all three sliders. Inspired by our final lecture in class from Jennifer Lee, I found myself having fun deciding on the appropriate emoji to use for each event along the timeline. 
   
-  * Step 6: Add an Emoji dropdown for kicks
-  * Step 7: Add an autocomplete that searches within dates
+Here is a comprehensive list of the emojis I used: 
+
+<img width="670" alt="Screen Shot 2022-05-08 at 7 47 40 PM" src="https://user-images.githubusercontent.com/66505479/167320744-12a0a9ee-e8eb-49af-9bbb-52b88791959f.png">
+
+  
+  **Step 7:** Add an autocomplete that searches within dates
   * Step 8: Style the autocomplete to make it fit with my look
 
 * Technical
