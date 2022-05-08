@@ -28,18 +28,18 @@ Here is a comprehensive list of the emojis I used:
   **Step 7:** Add an autocomplete that searches within dates
   * Step 8: Style the autocomplete to make it fit with my look
 
-* Technical
+## Technical
   * Autocomplete: choosing the item vs clicking on the magnifying glass
   * How linked should the sliders be? More linked more work but better experience
   * Should the airplane operate independently from the sliders?
   * How many emojis is too many emojis?
   * How exact should the autocomplete search? Substring, regular expression, exact match
 
-* Ethical
+## Ethical
   * Evo bio? too controversial?
   * The subjectiveness of the timeline
   * Why is the map US-centered?
   * Plane-phobia .... are we driving people to suicide?
 
-* Scaling
+## Scaling
   * If too many people use it Mapbox blocks us
