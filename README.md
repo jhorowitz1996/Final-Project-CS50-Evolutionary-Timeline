@@ -1,4 +1,4 @@
-# Soaring through the Skies of Evolutionary History: Documentation
+# Documentation: Soaring through the Skies of Evolutionary History
 
 ## Description ##
 
