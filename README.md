@@ -4,7 +4,7 @@
 
 This visualization illustrates the history of the universe within the persepctive of a flight from Los Angeles International Airport (LAX) to Boston Logan (BOS).
 
-Youtube video submission for project [here](https://youtu.be/Aat0wP0UfRc "here"). 
+YouTube video submission for project [here](https://youtu.be/Aat0wP0UfRc "here"). 
 ## Motivation ##
 
 I created this project as a Mother's Day gift to my mom, an Evolutionary Biology professor at UCLA. My mom has often encouraged me and her students to look beyond human exceptionalism and appreciate how small a role humankind has played within the history and evolution of the universe. Over break, she showed me a [video](https://www.businessinsider.com/animated-timeline-earth-history-2015-11 "video") infographic from Business Insider which she loved and wanted to use for her classes so I decided that I would secretly create a similar visualization for this CS course's final project. I believe this project is a fitting blend of my personal research interests in cartography and my mom's Evolutionary Biology work. 
