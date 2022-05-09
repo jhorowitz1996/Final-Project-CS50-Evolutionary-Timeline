@@ -5,9 +5,11 @@
               
   **Step 1**: As discussed in the credits/acknowledgements portion of the documentation available in my ReadME file, this project began initially as an attempt to modify an Business Insider animation which imployed a similar type of logic in its animation. In the initial animation from Business Insider, the authors of that work used the distance between LAX Airport to JFK Airport for their timeline points. To process and modify the data, the distnace to the location of JFK needed to be changed from the latitude and longitude points associated with LA and NY to LA and Boston. This allowed me to re-route the plane from LAX-JFK to LAX-BOS for the animation. Knowing that I would need the values to be recalculated in parallel with timeline events for a distance that was not the same as the LAX to JFK flight path, I recorded all of the stopping points used in the Business Insider visualization and made the neccessary mathematical calculations for the discretization of steps in the journey from LAX to BOS instead. 
   
+  
 Below are the modfied values used to implement the project for LA to Boston instead of New York:
 
-<img width="431" alt="Screen Shot 2022-05-08 at 7 49 23 PM" src="https://user-images.githubusercontent.com/66505479/167320807-60d2326d-218f-4bd8-8dbd-419c3c7485b6.png">
+<img width="400" alt="Screen Shot 2022-05-08 at 7 49 23 PM" src="https://user-images.githubusercontent.com/66505479/167320807-60d2326d-218f-4bd8-8dbd-419c3c7485b6.png">
+
 
   
   **Step 2:** My next step was to create the 3 sliders to represent the to date, distances, and events associated with the flight's path so that when you move the slider the text/numbers changed for each. To do this, I made a list of entries with each entry in the form of a dictionary with three values: 1) descriptive date, 2) year, and 3) event name. I made a modification to the html responsible for the slider interface so that the shape of the rectangle would change based on the amount of text that filled up the slider shape. 
@@ -20,9 +22,11 @@ Below are the modfied values used to implement the project for LA to Boston inst
   
   **Step 6:** I then provided an additional layer of functionality (and fun!) via the emoji dropdown which I then also linked to the index which controls both the geometric coordinates of the plane icon as well as the placement of all three sliders. Inspired by our final lecture in class from Jennifer Lee, I found myself having fun deciding on the appropriate emoji to use for each event along the timeline. 
   
+  
 Here is a comprehensive list of the emojis I used: 
 
-<img width="670" alt="Screen Shot 2022-05-08 at 7 47 40 PM" src="https://user-images.githubusercontent.com/66505479/167320744-12a0a9ee-e8eb-49af-9bbb-52b88791959f.png">
+<img width="470" alt="Screen Shot 2022-05-08 at 7 47 40 PM" src="https://user-images.githubusercontent.com/66505479/167320744-12a0a9ee-e8eb-49af-9bbb-52b88791959f.png">
+
 
   
   **Step 7:** The final layer of user functionality was added by way of a search bar. Using Algolia's autocomplete function I then implemented an autocomplete feature so that as the user looked up a date, the time would be suggested to them via a drop down bar with a set of options for a period of time ago distant from the present date. 
@@ -37,9 +41,6 @@ Here is a comprehensive list of the emojis I used:
 2. I also ran into a few snags when working to implement the autocomplete function. Alogolia's built-in functionality to choose an item from the drop down vs. being able to immmidiately implement a search query I found difficult to actualize. I realized that in order to choose a search item Algolia's autocorrect function neccesitates the use of the magnifying glass as a button. Other decisions needed to be taken into account with regar to the technical implementation of the search function in that I wasn't sure as to whether I should use substring, regular expression, or exact match to ensure the autocomplete worked effectively and with the most ease of use for the user. I ultimately decided to use regualr expression autocomplete so that users could choose from a set of different options across the evolutionary timeline. 
 
 3. I hestiated at first to connect the movement of all three sliders together with the airplane's movement given the neccesiary technical complexity of creating a shared index function for each to tie them altogether. I ultimately decided that the user experience of the visualization would be far improved if all these elements were tied together.
-
-  * How many emojis is too many emojis?
-  * How exact should the autocomplete search? Substring, regular expression, exact match
 
 ## Ethical
 With respect to the ethical concerns we are asked to describe for our project a few come to mind: 
