@@ -25,21 +25,27 @@ Here is a comprehensive list of the emojis I used:
 <img width="670" alt="Screen Shot 2022-05-08 at 7 47 40 PM" src="https://user-images.githubusercontent.com/66505479/167320744-12a0a9ee-e8eb-49af-9bbb-52b88791959f.png">
 
   
-  **Step 7:** Add an autocomplete that searches within dates
-  * Step 8: Style the autocomplete to make it fit with my look
+  **Step 7:** The final layer of user functionality was added by way of a search bar. Using Algolia's autocomplete function I then implemented an autocomplete feature so that as the user looked up a date, the time would be suggested to them via a drop down bar with a set of options for a period of time ago distant from the present date. 
 
+  **Step 8:** The last modification I made was to modify the styling of the search bar (coloration, size, spacing, placement of the magnifying glass) so that it was set with its own slider rectangle and the emoji drop down given its own respective square as well. 
+  
+  
 ## Technical
-  * Autocomplete: choosing the item vs clicking on the magnifying glass
-  * How linked should the sliders be? More linked more work but better experience
-  * Should the airplane operate independently from the sliders?
+
+1. The main issue I ran into was the connection between between the events on the timeline and the movement of the plane icon along the map frame. At first I had initially thought to sepearte the events to an even set of intervals along the map frame. This resulted in the placement of the plane along the US in incorrect locations with respect to the events portrayed on the evolutionary timescale. Instead of pacing out the movement of the plane along the arc evenly I modified my initial calcuation to instead calculate the amount of distance between each event (not all of which were equal). By calculating the difference between each pair of event individaully the program I wrote for this project could then be modified with a different destination (ex. Chicago O'Hare's latitude/longitude coordinates) given that the ratio of distance between each event was implemented rather than spreading them out across the length of the flight path's arc). 
+
+2. I also ran into a few snags when working to implement the autocomplete function. Alogolia's built-in functionality to choose an item from the drop down vs. being able to immmidiately implement a search query I found difficult to actualize. I realized that in order to choose a search item Algolia's autocorrect function neccesitates the use of the magnifying glass as a button. Other decisions needed to be taken into account with regar to the technical implementation of the search function in that I wasn't sure as to whether I should use substring, regular expression, or exact match to ensure the autocomplete worked effectively and with the most ease of use for the user. I ultimately decided to use regualr expression autocomplete so that users could choose from a set of different options across the evolutionary timeline. 
+
+3. I hestiated at first to connect the movement of all three sliders together with the airplane's movement given the neccesiary technical complexity of creating a shared index function for each to tie them altogether. I ultimately decided that the user experience of the visualization would be far improved if all these elements were tied together.
+
   * How many emojis is too many emojis?
   * How exact should the autocomplete search? Substring, regular expression, exact match
 
 ## Ethical
-  * Evo bio? too controversial?
-  * The subjectiveness of the timeline
-  * Why is the map US-centered?
-  * Plane-phobia .... are we driving people to suicide?
+With respect to the ethical concerns we are asked to describe for our project a few come to mind: 
+  * While I included a selective set of major points in the history of the unvierse for this visualization this does not give credit to the major milestones of true of other cultures and ethnicities. 
+  * Map projection in this case could be an ethical subject of discussion for this project given that many feel that certain map projection systems give an over-alottment of space on the map to Western geographic locations. 
+  * This visualization could also be considered problematical from an ethcial perspective given that the animation is centered on the United States. In future iterations of this project, expanding the universal animation timeline to be set to other flight paths and corresponding coordinates would allow individuals across the globe to visualize the timeline and transformation of the universe along the flight path to thier own hometown. 
 
 ## Scaling
-  * If too many people use it Mapbox blocks us
+A final unlikely concern (but also important to consider from a logistical perspective) is that of scaling. If too many people attempt to log onto the website visualization all at once, they could overwhelm the number of requests associated with my acccess token for Mapbox. However, this is admittedly very unlikely. 
