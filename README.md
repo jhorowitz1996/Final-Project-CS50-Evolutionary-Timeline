@@ -71,6 +71,8 @@ Acknowledgements to the class staff who helped me along problem sets leading up 
 
 A big thanks to the original creators of this Business Insider data visualizaiton from which this project was expanded. I found the contact info for Alex Kuzoian and was able to correspond with him to better appreciate where the timeline stopping points existed to then remap those events for my project (with a number of changes made to the dataset of timeline points as well). While Alex wasn't able to provide the data for the animaiton he was kind enough to point me in the direction of the National Geographic and New Scientist resources they used to help create the visualization in 2015. 
 
+For the Mapbox style applied in this visualization, I used [Mineral](https://www.mapbox.com/blog/designing-the-mineral-map-style "Mineral"), a specific Mapbox Studio style created by cartographer Madison Draper.
+
 I would also like to acknowledge, the OG SOS search engine that is StackOverflow in creating this work. I owe a debt of thanks to the numerous magnanimous internet strangers who provided answers specifically those surrounding how to use template in algolia's autocomplete, JS syntax, and troubleshooting with Mapbox/Turf.js functions.
 
 Following the final lecture on the Unicode Emoji Subcommittee, I would like to extend my thanks to Unicode's incredible work in cataloging the official Emoji charts from which I was able to retrieve the specfic emojis used in this work. 
